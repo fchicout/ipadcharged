@@ -1,0 +1,51 @@
+#!/bin/bash - 
+# chkconfig: 2345 20 80
+# description: Enables charging of iPads and boost charging of iPhones.
+/etc/init.d/functions
+#===============================================================================
+#
+#          FILE:  ipadcharged
+#  
+#   DESCRIPTION:  Enables charging of iPads and boost charging of iPhones.
+# 
+#       OPTIONS:  install-pkg  -> installs the rpm package for ipad_charge
+#                 start        -> start the deamon
+#                 stop         -> stop the deamon
+#                 restart      -> restart the deamon
+#  REQUIREMENTS:  ---
+#          BUGS:  ---
+#         NOTES:  Only tested on Fedora 17
+#        AUTHOR:  Fabio Chicout (fabio.cesar.medeiros@gmail.com) 
+#       CREATED: 01/14/2013 18:44:08 BRT
+#      REVISION: (Version 0.1 - Fabio Chicout) Initial development, feature definition and cases.
+#===============================================================================
+
+set -o nounset                              # Treat unset variables as an error
+set -x					    # Shell debug flag
+
+
+start (){
+	while true;
+	do
+		BUSNUM=$(lsusb | grep Apple | awk '{ print $2 }') DEVNUM=$(lsusb | grep Apple | tr -d : | awk '{ print $4 }') /usr/bin/ipad_charge
+	done;
+}
+
+
+case "$1" in
+	install-pkg) # installs the repo and the package
+	;;
+
+	start) # starts the deamon
+		( trap "true" HUP ; start ) > nohup.out 2>/dev/null </dev/null & disown
+	;;
+
+	stop) # stops the deamon
+	;;
+
+	restart) # restart the deamon
+	;;
+
+	*) # call help text
+	;;
+esac
