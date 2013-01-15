@@ -25,10 +25,17 @@ set -x					    # Shell debug flag
 
 
 start (){
-	while true;
-	do
-		BUSNUM=$(lsusb | grep Apple | awk '{ print $2 }') DEVNUM=$(lsusb | grep Apple | tr -d : | awk '{ print $4 }') /usr/bin/ipad_charge
-	done;
+        while true;
+        do
+		lsusb | grep Apple | while read t1 BN t2 DN t3 SN t4 t5
+        	do
+	                BUSNUM=$BN DEVNUM=$(echo $DN  | tr -d : ) /usr/bin/ipad_charge
+                done;
+        done;
+}
+
+stop (){
+	kill -9 $(pgrep ipad_charge)
 }
 
 
@@ -41,9 +48,12 @@ case "$1" in
 	;;
 
 	stop) # stops the deamon
+		stop
 	;;
 
 	restart) # restart the deamon
+		stop
+		start
 	;;
 
 	*) # call help text
