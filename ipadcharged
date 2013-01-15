@@ -38,9 +38,14 @@ stop (){
 	kill -9 $(pgrep ipad_charge)
 }
 
+install-pkg(){
+	wget -c http://download.opensuse.org/repositories/home:/zhonghuaren/Fedora_17/home:zhonghuaren.repo -O /etc/yum.repos.d/rpmsphere.repo
+	yum install ipad_charge
+}
 
 case "$1" in
 	install-pkg) # installs the repo and the package
+		install-pkg
 	;;
 
 	start) # starts the deamon
